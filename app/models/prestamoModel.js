@@ -3,18 +3,18 @@ module.exports = (sequelize, Sequelize) =>{
     const Prestamo = sequelize.define("prestamo",{
     
         EstudianteId:{
-            type: sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             allowNull: false
         },
         LibroId:{
-            type: sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             allowNull: false
         },
         fechaPrestamo:{
-            type: sequelize.DATE
+            type: Sequelize.DATE
         },
         fechaDevolucion:{
-            type: sequelize.DATE
+            type: Sequelize.DATE
         }
 
     })

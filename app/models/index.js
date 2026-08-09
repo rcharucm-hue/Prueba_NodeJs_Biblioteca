@@ -1,4 +1,4 @@
-const dbConfig = require("../config/db.config.js");
+const dbConfig = require("../config/dbConfig.js");
 
 const Sequelize = require("sequelize");
 
@@ -23,9 +23,12 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
 
 const db = {};
 db.Sequelize = Sequelize;
-db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-// Un Libro puede tener muchos Prestamos
+db.Estudiante = require("./estudianteModel.js")(sequelize, Sequelize);
+db.Libro = require("./libroModel.js")(sequelize, Sequelize);
+db.Prestamo = require("./prestamoModel.js")(sequelize, Sequelize);
+
 db.Libro.hasMany(db.Prestamo, {
   foreignKey: "libroId",
   as: "prestamos"
@@ -35,7 +38,6 @@ db.Prestamo.belongsTo(db.Libro, {
   as: "libro"
 });
 
-// Un Estudiante puede tener muchos Prestamos
 db.Estudiante.hasMany(db.Prestamo, {
   foreignKey: "estudianteId",
   as: "prestamos"
@@ -44,9 +46,5 @@ db.Prestamo.belongsTo(db.Estudiante, {
   foreignKey: "estudianteId",
   as: "estudiante"
 });
-
-db.estudiantes = require("./estudianteModel.js")(sequelize, Sequelize);
-db.libros = require("./libroModel.js")(sequelize, Sequelize);
-db.prestamos = require("./prestamoModel.js")(sequelize, Sequelize);
 
 module.exports = db;

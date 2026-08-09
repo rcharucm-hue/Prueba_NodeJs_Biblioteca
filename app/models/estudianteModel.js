@@ -3,13 +3,13 @@ module.exports = (sequelize, Sequelize) => {
     const Estudiante = sequelize.define("estudiante",{
 
         nombre:{
-            type: sequelize.STRING
+            type: Sequelize.STRING
         },
         carnet:{
-            type: sequelize.STRING
+            type: Sequelize.STRING
         },
         correo:{
-            type: sequelize.STRING
+            type: Sequelize.STRING
         }
     })
     return Estudiante;

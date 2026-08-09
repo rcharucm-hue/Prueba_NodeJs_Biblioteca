@@ -30,9 +30,9 @@ app.get("/", (req, res) => {
 });
 
 //require("./app/routes/turorial.routes")(app);
-require("./app/routes/estudiante.routes")(app);
-require("./app/routes/libro.routes")(app);
-require("./app/routes/prestamo.routes")(app);
+require("./app/routes/estudianteRoutes.js")(app);
+require("./app/routes/libroRoutes.js")(app);
+require("./app/routes/prestamoRoutes.js")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {

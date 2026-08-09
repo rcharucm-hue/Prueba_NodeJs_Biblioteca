@@ -1,5 +1,5 @@
 const db = require("../models");
-const Prestamo = db.prestamo;
+const Prestamo = db.Prestamo;
 const Op = db.Sequelize.Op;
 
 exports.create = async (req, res) => {
@@ -14,7 +14,7 @@ exports.create = async (req, res) => {
     }
   
     // Verificar si el libro existe
-    const libro = await db.libro.findByPk(libroId);
+    const libro = await db.Libro.findByPk(libroId);
     if (!libro) {
       return res.status(404).json({
         mensaje: "Libro no encontrado"
@@ -22,7 +22,7 @@ exports.create = async (req, res) => {
     }
 
     // Verificar si el estudiante existe
-    const estudiante = await db.estudiante.findByPk(estudianteId);
+    const estudiante = await db.Estudiante.findByPk(estudianteId);
     if (!estudiante) {
       return res.status(404).json({
         mensaje: "Estudiante no encontrado"
@@ -54,10 +54,11 @@ exports.create = async (req, res) => {
     res.status(500).json({
         mensaje: "Error al crear el préstamo"
     });
-  } 
+  }
+};
 
-  //Actualizar un prestamo 
-  exports.update = async (req, res) => {
+//Actualizar un prestamo 
+exports.update = async (req, res) => {
     try {
       const { id } = req.params;
       const { fechaDevolucion } = req.body;
@@ -81,7 +82,7 @@ exports.create = async (req, res) => {
         await prestamo.save();
 
         //hay que actualizar la disponibilidad del libro
-        const libro = await db.libro.findByPk(prestamo.libroId);
+        const libro = await db.Libro.findByPk(prestamo.libroId);
         libro.disponible = true;
         await libro.save();
 
@@ -94,26 +95,26 @@ exports.create = async (req, res) => {
     }
 };
 
-    //find all prestamos
-    exports.findAll = (req, res) => {
-        Prestamo.findAll({
-            include: [
-                {model: db.libro, as: "libro"},
-                {model: db.estudiante, as: "estudiante"}
-            ]
+//find all prestamos
+exports.findAll = (req, res) => {
+    Prestamo.findAll({
+        include: [
+            {model: db.Libro, as: "libro"},
+            {model: db.Estudiante, as: "estudiante"}
+        ]
+    })
+        .then(data => {
+            res.status(200).json(data);
         })
-            .then(data => {
-                res.status(200).json(data);
-            })
-            .catch(err => {
-                console.error(err);
-                res.status(500).json({
-                    mensaje: "Error al obtener los préstamos"
-                });
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({
+                mensaje: "Error al obtener los préstamos"
             });
-    };
+        });
+};
 
-    //find one prestamo id
+//find one prestamo id
 exports.findOne = (req, res) => {
     const id = req.params.id;
 
@@ -140,23 +141,22 @@ exports.findOne = (req, res) => {
         });
 };
 
-    //Eliminar un prestamo por id
-    exports.delete = (req, res) => {
-        const id = req.params.id;
+//Eliminar un prestamo por id
+exports.delete = (req, res) => {
+    const id = req.params.id;
 
-        Prestamo.destroy({
-            where: { id }
-        })
-            .then(() => {
-                res.status(200).json({
-                    mensaje: "Préstamo eliminado exitosamente."
-                });
-            })
-            .catch(err => {
-                console.error(err);
-                res.status(500).json({
-                    mensaje: "Error al eliminar el préstamo."
-                });
+    Prestamo.destroy({
+        where: { id }
+    })
+        .then(() => {
+            res.status(200).json({
+                mensaje: "Préstamo eliminado exitosamente."
             });
-    };
-}
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({
+                mensaje: "Error al eliminar el préstamo."
+            });
+        });
+};
